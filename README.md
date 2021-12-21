@@ -1,2 +1,2 @@
 # Ouroborus_project
-LMS system with broad oppotunities
+LMS system with broad opportunities.
