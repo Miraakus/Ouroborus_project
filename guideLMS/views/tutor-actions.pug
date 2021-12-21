@@ -1,0 +1,33 @@
+extends layout
+
+block extraHeader
+    link(rel='stylesheet', href='./css/status-indicators.css')
+    script(src='./js/status-indicators.js') 
+
+block content
+  h2 Hints delivered to #{student.id}
+  div
+     table.table.table-striped
+      thead
+        tr
+          th Concept Id
+          th Probability Learned by Challenge
+          th Hint Level
+          th Is Bottom Out
+          th Time
+          th Trait
+          th Target
+          th Selected
+          th Challenge Id
+      tbody
+        for hint in tutorActionHistory
+          tr
+            td #{hint.conceptId}          
+            td.scoreBackground #{Math.round(hint.scoreByChallenge * 1000)/10}   
+            td #{hint.hintLevel} 
+            td #{hint.isBottomOut}
+            td #{moment(hint.timestamp).calendar()}  
+            td #{hint.attribute}            
+            td #{hint.ruleTarget}      
+            td #{hint.ruleSelected}
+            td #{hint.challengeId}       

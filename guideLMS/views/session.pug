@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1 Session 
+  h3 #{session.id}
+
+  .row
+    div
+      h2 ITS Event Log
+      table.table.table-striped
+        thead
+          tr
+            th Event
+            th Time
+        tbody
+          for event in session.events
+            tr
+              td
+                a(href=`./session/${session.id}/event/${session.events.indexOf(event)}`) #{event.actor} #{event.action} #{event.target}
+              td #{new Date(event.time)}

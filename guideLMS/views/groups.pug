@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 Groups
+    if isAllowed('groups', 'post')
+      div.pull-right
+        form.form-horizontal(action='./groups/modify', method='POST')
+          .form-group.floatLeft
+            input(type='hidden', name='_csrf', value=_csrf)
+            button.btn.btn-primary(type='submit' name='action' value='addNew' style='margin-right: 5px;')
+              i.fa.fa-plus
+              | Add
+            if isAllowed('groups', 'delete')
+              button.btn.btn-danger(type='submit' name='action' value='deleteAll')
+                i.fa.fa-trash
+                | Delete all
+  div
+     table.table.table-striped
+      thead
+        tr
+          th Name
+      tbody
+        for group in groups
+          tr
+            td
+              a(href=`./group/${group._id}`) #{group.name}
+  div
+    include ./paginate

@@ -1,0 +1,48 @@
+extends layout
+
+block extraHeader
+    link(rel='stylesheet', href='./css/status-indicators.css')
+    script(src='./js/status-indicators.js')
+
+block content
+  h1 Students
+    if isAllowed('students', 'post')
+      div.pull-right.form-inline
+        form.form-group(action='./students', method='POST')
+            input(type='hidden', name='_csrf', value=_csrf)
+            input(type='hidden', name='filter', value=`${filter}`)
+            button.btn.btn-primary(type='submit' name='action' value='download' style='margin-right: 5px;')
+              i.fa.fa-download
+              | Download Data
+        if isAllowed('students', 'delete')
+          form.form-group(action='./students/delete', method='POST')
+              input(type='hidden', name='_csrf', value=_csrf)
+              input(type='hidden', name='filter', value=`${filter}`)
+              button.btn.btn-danger(type='submit' name='action' value='delete')
+                i.fa.fa-trash
+                | Delete all
+  if subtitle
+    h3 #{subtitle}
+  div
+    table.table.table-striped
+      thead
+        tr
+          th Student ID
+          th Average Probability Learned
+          th Class ID
+          th Group ID
+          th Total Sessions
+          th Last Sign In
+      tbody
+        for student in students
+          tr
+            td
+              a(href=`./student/${student.id}`) #{student.id}
+            td.scoreBox #{Math.round(student.studentModel.avgProbabilityLearnedOfAllConcepts() * 1000000)/1000000}
+            td #{student.classId}
+            td #{student.groupId}
+            td(align="center")
+              a(href=`./sessions?studentId=${student.id}`) #{student.totalSessions}
+            td #{moment(student.lastSignIn).calendar()}
+    div
+      include ./paginate

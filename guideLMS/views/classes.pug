@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Classes
+  div
+     table.table.table-striped
+      thead
+        tr
+          th Id
+      tbody
+        for c in classes
+          tr
+            td
+              a(href=`./students?classId=${c.id}`) #{c.id}
+  div
+    include ./paginate

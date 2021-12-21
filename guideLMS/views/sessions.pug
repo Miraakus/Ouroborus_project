@@ -1,0 +1,56 @@
+extends layout
+
+block content
+  h1 Sessions
+  if studentId
+    h4 #{studentId}
+
+  div
+    - var title = (filter.active === true ? 'Active' : ' ')
+      h3 #{title}
+        div.pull-right.form-inline
+          if !studentId
+            if (filter.active)
+              a(href="./sessions")
+                button.btn.btn-primary(type="button" style='margin-right: 5px;') Show All
+              if isAllowed('sessions', 'post')
+                form.form-group(action='./sessions', method='POST')
+                  input(type='hidden', name='_csrf', value=_csrf)
+                  button.btn.btn-warning(type='submit' name='action' value='deactivateAll' style='margin-right: 5px;')
+                    i.fa.fa-hourglass-end
+                    | Deactivate all
+            else
+              a(href="./sessions?active=true")
+                button.btn.btn-primary(type="button" style='margin-right: 5px;') Show Active
+              if isAllowed('sessions', 'delete')
+                form.form-group(action='./sessions/delete', method='POST')
+                    input(type='hidden', name='_csrf', value=_csrf)
+                    button.btn.btn-danger(type='submit' name='action' value='delete')
+                      i.fa.fa-trash
+                      | Delete all
+    table.table.table-striped
+      thead
+        tr
+          th Session ID
+          th Active
+          th Student ID
+          th Class ID
+          th Group ID
+          th Start Time
+          th Total Events
+      tbody
+        for session in sessions
+          tr
+            td
+              a(href=`./session/${session.id}`) #{session.id}
+            td #{session.active}
+            td #{session.studentId}
+            td #{session.classId}
+            td #{session.groupId}
+            td #{moment(session.startTime).calendar()}
+            if session.events
+              td #{session.events.length}
+            else
+              td No events
+  div
+    include ./paginate
